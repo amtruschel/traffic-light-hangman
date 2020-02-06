@@ -13,7 +13,7 @@ class WordComponent extends React.Component {
 
   render() {
     return (
-      <p>{this.secretWordLength()}</p>
+        <p>{this.revealedWord()}</p>
     )
   }
 
@@ -32,6 +32,10 @@ class WordComponent extends React.Component {
       outputString += '*'
     }
     return outputString
+  }
+
+  revealedWord() {
+    return this.state.revealedWord;
   }
 
   guessLetter(letter) {

@@ -6,14 +6,13 @@ class GameComponent extends React.Component {
     super(props)
 
     this.state = {
-      secretWord: null
     }
   }
 
   render() {
     return (
       <div>
-
+        <WordComponent/>
       </div>
     )
   }
