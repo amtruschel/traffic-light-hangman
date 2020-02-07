@@ -7,13 +7,22 @@ class WordComponent extends React.Component {
 
     this.state = {
       secretWord: this.secretWord(),
-      revealedWord: this.setRevealedWord()
+      revealedWord: null
     }
+  }
+
+  componentDidMount() {
+    this.setState( { revealedWord: this.setRevealedWord() });
+  }
+
+  componentWillUnmount() {
+    this.setState( { secretWord: null } );
+    this.setState( { revealedWord: null } );
   }
 
   render() {
     return (
-        <p>{this.revealedWord()}</p>
+        <p>{this.state.revealedWord}</p>
     )
   }
 
@@ -26,10 +35,10 @@ class WordComponent extends React.Component {
   }
 
   setRevealedWord() {
-    const length = this.secretWordLength() - 1
-    const outputString = '';
-    for (i = 0; i < length; i++) {
-      outputString += '*'
+    var length = this.state.secretWord.length
+    var outputString = '';
+    for (let i = 0; i < length; i++) {
+      outputString += ' * '
     }
     return outputString
   }
@@ -39,27 +48,18 @@ class WordComponent extends React.Component {
   }
 
   guessLetter(letter) {
-    const word = this.state.secretWord;
-    const correctGuess = (word.includes(letter) ? true : false)
-    const revealedWord = this.state.revealedWord;
+    var theSecretWord = this.state.secretWord;
+    var correctGuess = (theSecretWord.includes(letter) ? true : false)
+    var theRevealedWord = this.state.revealedWord;
 
     if (correctGuess) {
-      for (i = 0; i < word.length; i++) {
-        if (word.charAt(i) === letter) {
-          revealedWord.charAt(i) = letter
+      for (let i = 0; i < this.word.length; i++) {
+        if (this.word.charAt(i) === letter) {
+          // this.theRevealedWord.charAt(i) = letter
         }
       }
     }
   }
-
-
-
-  emptyLetters() {
-    for (i = 0; i < (this.secretWordLength() - 1); i++) {
-      <p>_</p>
-    });
-  }
-
 
 
 }
