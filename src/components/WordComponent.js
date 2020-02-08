@@ -22,7 +22,7 @@ class WordComponent extends React.Component {
 
   render() {
     return (
-        <p>{this.state.revealedWord}</p>
+        <p>{this.revealedWord()}</p>
     )
   }
 
@@ -38,7 +38,7 @@ class WordComponent extends React.Component {
     var length = this.state.secretWord.length
     var outputString = '';
     for (let i = 0; i < length; i++) {
-      outputString += ' * '
+      outputString += '*'
     }
     return outputString
   }
@@ -48,14 +48,24 @@ class WordComponent extends React.Component {
   }
 
   guessLetter(letter) {
-    var theSecretWord = this.state.secretWord;
-    var correctGuess = (theSecretWord.includes(letter) ? true : false)
-    var theRevealedWord = this.state.revealedWord;
+    var secretWord = this.state.secretWord;
+    var correctGuess = (secretWord.includes(letter) ? true : false)
+    var revealedWord = this.state.revealedWord;
+    var firstSubString = null;
+    var lastSubString = null;
 
     if (correctGuess) {
-      for (let i = 0; i < this.word.length; i++) {
-        if (this.word.charAt(i) === letter) {
-          // this.theRevealedWord.charAt(i) = letter
+      for (let i = 0; i < secretWord.length; i++) {
+        if (secretWord.charAt(i) === letter) {
+          if (i === 0) {
+            firstSubString = letter
+            lastSubString = revealedWord.substring(i + 1)
+            this.setState( { revealedWord: firstSubString + lastSubString });
+          } else {
+            firstSubString = revealedWord.substring(0, i)
+            lastSubString = revealedWord.substring((i + 1))
+            this.setState( { revealedWord: firstSubString + letter + lastSubString });
+          }
         }
       }
     }
