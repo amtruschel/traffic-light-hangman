@@ -6,9 +6,15 @@ class WordComponent extends React.Component {
     super(props)
 
     this.state = {
-      secretWord: this.secretWord(),
-      revealedWord: null
+      secretWord: this.secretWord().toLowerCase(),
+      revealedWord: '',
+      guess: '',
+      correctLastGuess: false,
+      message: ''
     }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -18,17 +24,54 @@ class WordComponent extends React.Component {
   componentWillUnmount() {
     this.setState( { secretWord: null } );
     this.setState( { revealedWord: null } );
+    this.setState( { guess: '' } );
+    this.setState( { message: '' } );
+    this.setState( { correctLastGuess: false });
   }
 
   render() {
     return (
+      <div>
+        <p>{this.message()}</p>
+        <br />
+        <br />
         <p>{this.revealedWord()}</p>
+        <br />
+        <form onSubmit={this.handleSubmit}>
+          <input type="text" name="guess" id="guess" value={this.state.guess} onChange={this.handleChange} placeholder="guess a letter" />
+          <br />
+          <button type="submit">guess</button>
+        </form>
+      </div>
     )
+  }
+
+  handleChange(event) {
+    this.setState({guess: event.target.value});
+  }
+
+  handleSubmit(event) {
+    this.guessLetter(event.target.guess.value.toLowerCase());
+    event.preventDefault();
   }
 
   secretWord() {
     return randomWords().sort( () => Math.random() - 0.5).pop();
   }
+
+  message() {
+    return this.state.message;
+  }
+
+  // setMessage() {
+  //   if (this.isWordRevealed()) {
+  //     this.setState({ message: 'you win!' });
+  //   } else if (this.state.correctLastGuess) {
+  //     this.setState({ message: 'nice! keep going' });
+  //   } else {
+  //     this.setState({ message: 'sorry, guess again' });
+  //   }
+  // }
 
   secretWordLength() {
     return this.state.secretWord.length;
@@ -45,6 +88,10 @@ class WordComponent extends React.Component {
 
   revealedWord() {
     return this.state.revealedWord;
+  }
+
+  isWordRevealed() {
+    return (this.state.revealedWord.includes('*') ? false : true)
   }
 
   guessLetter(letter) {
@@ -64,13 +111,15 @@ class WordComponent extends React.Component {
           } else {
             firstSubString = revealedWord.substring(0, i)
             lastSubString = revealedWord.substring((i + 1))
-            this.setState( { revealedWord: firstSubString + letter + lastSubString });
+            this.setState({ revealedWord: firstSubString + letter + lastSubString });
           }
+          this.setState({ correctLastGuess: true })
         }
       }
     }
-  }
 
+    this.setState({ guess: '' });
+  }
 
 }
 
