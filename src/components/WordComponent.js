@@ -9,8 +9,8 @@ class WordComponent extends React.Component {
       secretWord: this.secretWord().toLowerCase(),
       revealedWord: '',
       guess: '',
-      correctLastGuess: false,
-      message: ''
+      correctLastGuess: 'false',
+      message: 'guess a letter'
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -22,11 +22,11 @@ class WordComponent extends React.Component {
   }
 
   componentWillUnmount() {
-    this.setState( { secretWord: null } );
-    this.setState( { revealedWord: null } );
+    this.setState( { secretWord: '' } );
+    this.setState( { revealedWord: '' } );
     this.setState( { guess: '' } );
+    this.setState( { correctLastGuess: false } );
     this.setState( { message: '' } );
-    this.setState( { correctLastGuess: false });
   }
 
   render() {
@@ -52,6 +52,7 @@ class WordComponent extends React.Component {
 
   handleSubmit(event) {
     this.guessLetter(event.target.guess.value.toLowerCase());
+    this.setState({ guess: '' })
     event.preventDefault();
   }
 
@@ -63,15 +64,17 @@ class WordComponent extends React.Component {
     return this.state.message;
   }
 
-  // setMessage() {
-  //   if (this.isWordRevealed()) {
-  //     this.setState({ message: 'you win!' });
-  //   } else if (this.state.correctLastGuess) {
-  //     this.setState({ message: 'nice! keep going' });
-  //   } else {
-  //     this.setState({ message: 'sorry, guess again' });
-  //   }
-  // }
+  setMessage() {
+    if (this.isWordRevealed()) {
+      this.setState({ message: 'you win!' });
+    } else if (this.lastGuess() === 'true') {
+      this.setState({ message: 'nice, keep going' });
+    } else if (this.lastGuess() === 'same') {
+      this.setState({ message: 'already guessed that correct letter' });
+    } else {
+      this.setState({ message: 'try again' });
+    }
+  }
 
   secretWordLength() {
     return this.state.secretWord.length;
@@ -94,31 +97,42 @@ class WordComponent extends React.Component {
     return (this.state.revealedWord.includes('*') ? false : true)
   }
 
+  lastGuess() {
+    return this.state.correctLastGuess;
+  }
+
   guessLetter(letter) {
     var secretWord = this.state.secretWord;
     var correctGuess = (secretWord.includes(letter) ? true : false)
     var revealedWord = this.state.revealedWord;
     var firstSubString = null;
     var lastSubString = null;
+    var localRevealedWord = revealedWord;
+
+    if (revealedWord.includes(letter)) {
+      this.setState({ correctLastGuess: 'same' }, () => this.setMessage());
+      return;
+    }
 
     if (correctGuess) {
       for (let i = 0; i < secretWord.length; i++) {
         if (secretWord.charAt(i) === letter) {
           if (i === 0) {
             firstSubString = letter
-            lastSubString = revealedWord.substring(i + 1)
-            this.setState( { revealedWord: firstSubString + lastSubString });
+            lastSubString = localRevealedWord.substring(i + 1)
+            localRevealedWord = firstSubString + lastSubString
           } else {
-            firstSubString = revealedWord.substring(0, i)
-            lastSubString = revealedWord.substring((i + 1))
-            this.setState({ revealedWord: firstSubString + letter + lastSubString });
+            firstSubString = localRevealedWord.substring(0, i)
+            lastSubString = localRevealedWord.substring((i + 1))
+            localRevealedWord = firstSubString + letter + lastSubString
           }
-          this.setState({ correctLastGuess: true })
         }
       }
+      this.setState({ revealedWord: localRevealedWord });
+      this.setState({ correctLastGuess: 'true'}, () => this.setMessage());
+    } else {
+      this.setState({ correctLastGuess: 'false'}, () => this.setMessage());
     }
-
-    this.setState({ guess: '' });
   }
 
 }
