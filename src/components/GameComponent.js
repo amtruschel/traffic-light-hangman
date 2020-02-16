@@ -33,23 +33,33 @@ class GameComponent extends React.Component {
 
   render() {
     return (
-      <div>
-        <div id="message">
-          <p>{this.message()}</p>
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <div id="message">
+              <p>{this.message()}</p>
+            </div>
+          </div>
         </div>
-        <div id="hangman">
-          <HangmanComponent correctLastGuess={this.state.correctLastGuess} wrongGuessCount={this.state.wrongGuessCount}/>
-        </div>
-        <br />
-        <div id="revealedWord">
-          <p>{this.revealedWord()}</p>
-        </div>
-        <div id="guessForm">
-          <form onSubmit={this.handleSubmit}>
-            <input type="text" name="guess" id="guess" value={this.state.guess} onChange={this.handleChange} placeholder="guess a letter" />
+        <div className="row">
+          <div className="col">
+            <HangmanComponent correctLastGuess={this.state.correctLastGuess} wrongGuessCount={this.state.wrongGuessCount}/>
             <br />
-            <button type="submit">guess</button>
-          </form>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            <div id="revealedWord">
+              <p>{this.revealedWord()}</p>
+            </div>
+            <div id="guessForm">
+              <form onSubmit={this.handleSubmit}>
+                <input type="text" name="guess" id="guess" value={this.state.guess} onChange={this.handleChange} placeholder="guess a letter" />
+                <br />
+                <button type="submit">guess</button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -78,6 +88,8 @@ class GameComponent extends React.Component {
       this.setState({ message: 'you win!' });
     } else if (this.lastGuess() === 'true') {
       this.setState({ message: 'nice, keep going' });
+    } else if (this.lastGuess() === 'empty') {
+        this.setState({ message: 'forgot to enter a letter!' });
     } else if (this.lastGuess() === 'same') {
       this.setState({ message: 'already guessed that correct letter' });
     } else {
@@ -111,6 +123,10 @@ class GameComponent extends React.Component {
   }
 
   guessLetter(letter) {
+    if (letter.length === 0) {
+      this.setState({ correctLastGuess: 'empty' }, () => this.setMessage());
+      return;
+    }
     var secretWord = this.state.secretWord;
     var correctGuess = (secretWord.includes(letter) ? true : false)
     var revealedWord = this.state.revealedWord;

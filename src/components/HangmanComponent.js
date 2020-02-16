@@ -11,28 +11,25 @@ class HangmanComponent extends React.Component {
 
   render() {
     return(
-      this.output()
-    )
-  }
-
-  head() {
-    return <div id="head"></div>
-  }
-
-  body() {
-    return <div id="body"></div>
-  }
-
-  output() {
-    return(
-      <div>
-        <div id="head"></div>
-        <div id="body"></div>
+      <div id="hangman">
+        {this.output()}
       </div>
     )
   }
 
-
+  output() {
+    debugger
+    return(
+      <div>
+        <p id="hangman-head"></p>
+        <p id="hangman-body"></p>
+        <p id="hangman-right-arm"></p>
+        <p id="hangman-left-arm"></p>
+        <p id="hangman-right-leg"></p>
+        <p id="hangman-left-leg"></p>
+      </div>
+    )
+  }
 
 }
 
