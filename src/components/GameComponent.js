@@ -133,6 +133,7 @@ class GameComponent extends React.Component {
     var firstSubString = null;
     var lastSubString = null;
     var localRevealedWord = revealedWord;
+    var wrongGuessCount = this.state.wrongGuessCount;
 
     if (revealedWord.includes(letter)) {
       this.setState({ correctLastGuess: 'same' }, () => this.setMessage());
@@ -156,7 +157,9 @@ class GameComponent extends React.Component {
       this.setState({ revealedWord: localRevealedWord });
       this.setState({ correctLastGuess: 'true'}, () => this.setMessage());
     } else {
-      this.setState({ correctLastGuess: 'false'}, () => this.setMessage());
+      this.setState({ correctLastGuess: 'false'});
+      debugger
+      this.setState({ wrongGuessCount: wrongGuessCount += 1 }, () => this.setMessage());
     }
   }
 
