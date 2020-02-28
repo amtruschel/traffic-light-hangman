@@ -34,6 +34,7 @@ class GameComponent extends React.Component {
   render() {
     return (
       <div className="container">
+      <HangmanComponent correctLastGuess={this.state.correctLastGuess} wrongGuessCount={this.state.wrongGuessCount}/>
         <div className="row">
           <div className="col">
             <div id="message">
@@ -43,22 +44,25 @@ class GameComponent extends React.Component {
         </div>
         <div className="row">
           <div className="col">
-            <HangmanComponent correctLastGuess={this.state.correctLastGuess} wrongGuessCount={this.state.wrongGuessCount}/>
-            <br />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col">
             <div id="revealedWord">
               <p>{this.revealedWord()}</p>
             </div>
-            <div id="guessForm">
-              <form onSubmit={this.handleSubmit}>
-                <input type="text" name="guess" id="guess" value={this.state.guess} onChange={this.handleChange} placeholder="guess a letter" />
-                <br />
-                <button type="submit">guess</button>
-              </form>
-            </div>
+            {this.state.wrongGuessCount < 5 &&
+              <div id="guessForm">
+                <form onSubmit={this.handleSubmit}>
+                  <input type="text" name="guess" id="guess" value={this.state.guess} onChange={this.handleChange} placeholder="guess a letter" />
+                  <br />
+                  <button type="submit">guess</button>
+                </form>
+              </div>
+            }
+            {(this.state.wrongGuessCount === 5 || this.isWordRevealed()) &&
+              <div id="restartButtonForm">
+                <form onSubmit={this.restartGame}>
+                  <button type="submit">restart</button>
+                </form>
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -72,6 +76,20 @@ class GameComponent extends React.Component {
   handleSubmit(event) {
     this.guessLetter(event.target.guess.value.toLowerCase());
     this.setState({ guess: '' })
+    event.preventDefault();
+  }
+
+  restartGame(event) {
+    this.setState(
+      {
+        secretWord: this.secretWord().toLowerCase(),
+        revealedWord: '',
+        guess: '',
+        correctLastGuess: 'false',
+        message: 'guess a letter',
+        wrongGuessCount: 0
+      }
+    )
     event.preventDefault();
   }
 
@@ -92,6 +110,8 @@ class GameComponent extends React.Component {
         this.setState({ message: 'forgot to enter a letter!' });
     } else if (this.lastGuess() === 'same') {
       this.setState({ message: 'already guessed that correct letter' });
+    } else if (this.lastGuess() === 'game over') {
+      this.setState({ message: 'game over :(', revealedWord: `secret word was ${this.state.secretWord}`});
     } else {
       this.setState({ message: 'try again' });
     }
@@ -127,6 +147,7 @@ class GameComponent extends React.Component {
       this.setState({ correctLastGuess: 'empty' }, () => this.setMessage());
       return;
     }
+
     var secretWord = this.state.secretWord;
     var correctGuess = (secretWord.includes(letter) ? true : false)
     var revealedWord = this.state.revealedWord;
@@ -156,9 +177,11 @@ class GameComponent extends React.Component {
       }
       this.setState({ revealedWord: localRevealedWord });
       this.setState({ correctLastGuess: 'true'}, () => this.setMessage());
+    } else if (wrongGuessCount === 4) {
+      this.setState({ correctLastGuess: 'game over'});
+      this.setState({ wrongGuessCount: wrongGuessCount += 1 }, () => this.setMessage());
     } else {
       this.setState({ correctLastGuess: 'false'});
-      debugger
       this.setState({ wrongGuessCount: wrongGuessCount += 1 }, () => this.setMessage());
     }
   }

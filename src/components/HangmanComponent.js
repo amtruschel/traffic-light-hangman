@@ -3,10 +3,7 @@ import React from 'react';
 class HangmanComponent extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      correctLastGuess: props.correctLastGuess,
-      wrongGuessCount: props.wrongGuessCount
-    }
+    this.state = {}
   }
 
   render() {
@@ -17,30 +14,77 @@ class HangmanComponent extends React.Component {
     )
   }
 
-  output() {
-    return(
-      <div>
-        {this.state.wrongGuessCount > 0 &&
-          <p id="hangman-head"></p>
-        }
-        {this.state.wrongGuessCount > 1 &&
-          <p id="hangman-body"></p>
-        }
-        {this.state.wrongGuessCount > 2 &&
-          <p id="hangman-right-arm"></p>
-        }
-        {this.state.wrongGuessCount > 3 &&
-          <p id="hangman-left-arm"></p>
-        }
-        {this.state.wrongGuessCount > 4 &&
-          <p id="hangman-right-leg"></p>
-        }
-        {this.state.wrongGuessCount > 5 &&
-          <p id="hangman-left-leg"></p>
-        }
-      </div>
-    )
-  }
+    output() {
+      return(
+        <div id="hangman-wrapper">
+          {this.props.wrongGuessCount === 1 &&
+            <div className="row">
+              <div className="col">
+                <div className="wrong-one"></div>
+              </div>
+            </div>
+          }
+          {this.props.wrongGuessCount === 2 &&
+            <div className="row">
+              <div className="col">
+                <div className="wrong-one"></div>
+              </div>
+              <div className="col">
+                <div className="wrong-two"></div>
+              </div>
+            </div>
+          }
+          {this.props.wrongGuessCount === 3 &&
+            <div className="row">
+              <div className="col">
+                <div className="wrong-one"></div>
+              </div>
+              <div className="col">
+                <div className="wrong-two"></div>
+              </div>
+              <div className="col">
+                <div className="wrong-three"></div>
+              </div>
+            </div>
+          }
+          {this.props.wrongGuessCount === 4 &&
+            <div className="row">
+              <div className="col">
+                <div className="wrong-one"></div>
+              </div>
+              <div className="col">
+                <div className="wrong-two"></div>
+              </div>
+              <div className="col">
+                <div className="wrong-three"></div>
+              </div>
+              <div className="col">
+                <div className="wrong-four"></div>
+              </div>
+            </div>
+          }
+          {this.props.wrongGuessCount === 5 &&
+            <div className="row">
+              <div className="col">
+                <div className="wrong-one"></div>
+              </div>
+              <div className="col">
+                <div className="wrong-two"></div>
+              </div>
+              <div className="col">
+                <div className="wrong-three"></div>
+              </div>
+              <div className="col">
+                <div className="wrong-four"></div>
+              </div>
+              <div className="col">
+                <div className="wrong-five"></div>
+              </div>
+            </div>
+          }
+        </div>
+      )
+    }
 
 }
 
