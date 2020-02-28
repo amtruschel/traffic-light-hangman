@@ -47,7 +47,7 @@ class GameComponent extends React.Component {
             <div id="revealedWord">
               <p>{this.revealedWord()}</p>
             </div>
-            {this.state.wrongGuessCount < 5 &&
+            {(this.state.wrongGuessCount < 5 && !this.isWordRevealed()) &&
               <div id="guessForm">
                 <form onSubmit={this.handleSubmit}>
                   <input type="text" name="guess" id="guess" value={this.state.guess} onChange={this.handleChange} placeholder="guess a letter" />
