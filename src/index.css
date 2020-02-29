@@ -75,3 +75,9 @@ input {
   background-color: #FC2305;
   border-radius: 50%;
 }
+
+#photo-cred {
+  font-size: 8px;
+  margin-bottom: 0px;
+  margin-left: 12px;
+}
