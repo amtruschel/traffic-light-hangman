@@ -5,5 +5,5 @@
 Simple hangman app, with each wrong guess indicated by a traffic light. My first SPA project, built with React.
 
 ### To Do
-- Add testing with Jest & Enzyme
+- Add testing
 - Find free API to use for generating random words
