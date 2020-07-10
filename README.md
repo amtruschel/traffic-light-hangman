@@ -2,7 +2,7 @@
 
 [Live app here](https://traffic-light-hangman.herokuapp.com/)
 
-Simple hangman app, with each wrong guess indicated by a traffic light. My first SPA project, built with React.
+Simple hangman app, with each wrong guess indicated by a traffic light. My first personal SPA project, built with React.
 
 ### To Do
 - Add testing
